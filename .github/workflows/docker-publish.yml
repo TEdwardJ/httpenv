@@ -54,6 +54,7 @@ jobs:
           platforms: linux/amd64
   trivy-scan:
     runs-on: ubuntu-latest
+    needs: [build-test-image]
     permissions:
       contents: read
       packages: write
