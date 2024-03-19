@@ -46,9 +46,8 @@ jobs:
       - name: Build and Push to GHCR
         uses: docker/build-push-action@v5
         with:
-          load: true
-          push: false
-          tags: ${{ github.run_id }}
+          push: true
+          tags: ghcr.io/${{ env.IMAGE_NAME }}:${{ github.run_id }}
           # target: test 
           # something wrong with target... what is it?
           cache-from: type=gha
@@ -63,10 +62,13 @@ jobs:
 
       
     steps:
+      - name: Pull image to scan
+        run: docker pull ghcr.io/${{ env.IMAGE_NAME }}:"$GITHUB_RUN_ID"
+    
       - name: Run Trivy for all CVEs (non-blocking)
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ github.run_id }}
+          image-ref: ghcr.io/${{ env.IMAGE_NAME }}:${{ github.run_id }}
           exit-code: 0
           format: table      
           
