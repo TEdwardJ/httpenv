@@ -52,7 +52,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ steps.lowercase_repo_name.outputs.name }}:${{ github.run_id }}
+          tags: ${{ github.run_id }}
           # target: test 
           # something wrong with target... what is it?
           cache-from: type=gha
