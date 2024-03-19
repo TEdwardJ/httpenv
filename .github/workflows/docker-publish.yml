@@ -42,12 +42,17 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Make lower case test image name
+        id: lowercase_repo_name
+        run: echo "::set-output name=name::$(echo "ghcr.io/${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]')"
+
       
       - name: Build and Push to GHCR
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ghcr.io/${{ env.IMAGE_NAME }}:${{ github.run_id }}
+          tags: ${{ steps.lowercase_repo_name.outputs.name }}:${{ github.run_id }}
           target: test
           cache-from: type=gha
           cache-to: type=gha,mode=max
