@@ -72,6 +72,13 @@ jobs:
         id: lowercase_repo_name
         run: echo "::set-output name=name::$(echo "ghcr.io/${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]')"
 
+      - name: Login to ghcr.io registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Pull test image to scan
         run: docker pull ${{ steps.lowercase_repo_name.outputs.name }}:"$GITHUB_RUN_ID"
 
